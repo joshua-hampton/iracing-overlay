@@ -14,4 +14,4 @@ The project is written in Rust. After cloning the code, it can be build using `c
 
 ## Important notes
 
-This is project is at a very early stage, and is mostly just a proof-of-concept at the moment. As such, currently the executable will quietly and immediately exit if you do not have the iRacing simulator running, and the window will not automatically stay on top of iRacing.
+This is project is at a very early stage, and is mostly just a proof-of-concept at the moment. As such, currently the executable will quietly and immediately exit if you do not have the iRacing simulator running.

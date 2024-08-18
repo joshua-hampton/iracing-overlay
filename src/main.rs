@@ -56,7 +56,9 @@ impl eframe::App for IRacingApp {
 
 fn main() -> Result<(), eframe::Error> {
     let options = eframe::NativeOptions {
-        viewport: egui::ViewportBuilder::default().with_inner_size([320.0, 240.0]),
+        viewport: egui::ViewportBuilder::default()
+            .with_inner_size([320.0, 240.0])
+            .with_always_on_top(),
         ..Default::default()
     };
 
