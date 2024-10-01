@@ -77,7 +77,13 @@ impl MainApp {
 
     fn render_home_options(&mut self, ui: &mut egui::Ui) {
         ui.label("Home");
+
         ui.label(format!("Font size: {}", self.config.home_config.font_size));
+
+        ui.horizontal(|ui| {
+            ui.label("Pick background colour");
+            ui.color_edit_button_srgba(&mut self.config.home_config.app_colour);
+        });
     }
 
     fn render_speed_options(&mut self, ui: &mut egui::Ui) {
@@ -110,6 +116,11 @@ impl MainApp {
             }
         });
 
+        ui.horizontal(|ui| {
+            ui.label("Pick background colour");
+            ui.color_edit_button_srgba(&mut self.config.speed_config.overlay_bgcolour);
+        });
+
         if display_toggle.clicked() {
             self.save_config();
             self.manage_speed_overlay();
@@ -139,6 +150,12 @@ impl MainApp {
             self.config.lastlaptime_config.display
         ));
         let display_toggle = ui.add(toggle(&mut self.config.lastlaptime_config.display));
+
+        ui.horizontal(|ui| {
+            ui.label("Pick background colour");
+            ui.color_edit_button_srgba(&mut self.config.lastlaptime_config.overlay_bgcolour);
+        });
+
         if display_toggle.clicked() {
             self.save_config();
             self.manage_lastlaptime_overlay();
@@ -168,13 +185,16 @@ impl MainApp {
             WindowsConfig {
                 home_config: HomeConfig {
                     font_size: self.config.home_config.font_size,
+                    app_colour: self.config.home_config.app_colour,
                 },
                 speed_config: SpeedConfig {
                     display: self.config.speed_config.display,
                     units: self.config.speed_config.units.clone(),
+                    overlay_bgcolour: self.config.speed_config.overlay_bgcolour,
                 },
                 lastlaptime_config: LaspLapTimeConfig {
                     display: self.config.lastlaptime_config.display,
+                    overlay_bgcolour: self.config.lastlaptime_config.overlay_bgcolour,
                 },
             },
         );
@@ -200,6 +220,10 @@ impl eframe::App for MainApp {
         ]
         .into();
         ctx.set_style(style);
+
+        let mut visuals = egui::Visuals::default();
+        visuals.panel_fill = self.config.home_config.app_colour;
+        ctx.set_visuals(visuals);
 
         ctx.request_repaint();
         self.render_top_panel(ctx);

@@ -28,9 +28,9 @@ impl IRacingLogging {
     }
 
     pub fn update_telemetry(&mut self) {
-        println!("Checking");
+        //println!("Checking");
         if self.last_update.elapsed().as_millis() >= 16 {
-            println!("updating");
+            //println!("updating");
             //self.telemetry.speed += 1.;
             //self.telemetry.lastlaptime += 0.5;
             if let Ok(data) = self.connection.blocking().expect("Unable to start telemetry reader").sample(Duration::from_millis(16)) {

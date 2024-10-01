@@ -8,6 +8,7 @@ mod util;
 
 struct SpeedApp {
     local_telem: telemetry::IRacingLogging,
+    overlay_bgcolour: egui::Color32,
     units: util::SpeedUnits,
 }
 
@@ -15,8 +16,10 @@ impl SpeedApp {
     fn new() -> Self {
         let config: util::WindowsConfig = confy::load("iracing-overlays", None).unwrap_or_default();
         let units: util::SpeedUnits = config.speed_config.units;
+        let overlay_bgcolour: egui::Color32 = config.speed_config.overlay_bgcolour;
         Self {
             local_telem: telemetry::IRacingLogging::new(),
+            overlay_bgcolour,
             units,
         }
     }
@@ -27,6 +30,10 @@ impl SpeedApp {
 
 impl App for SpeedApp {
     fn update(&mut self, ctx: &Context, _frame: &mut eframe::Frame) {
+        let mut visuals = egui::Visuals::default();
+        visuals.panel_fill = self.overlay_bgcolour;
+        ctx.set_visuals(visuals);
+
         ctx.request_repaint();
         self.update_telemetry();
         CentralPanel::default().show(ctx, |ui| {

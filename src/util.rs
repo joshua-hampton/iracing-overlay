@@ -79,23 +79,48 @@ pub enum SpeedUnits {
 #[derive(Serialize, Deserialize)]
 pub struct HomeConfig {
     pub font_size: f32,
+    pub app_colour: egui::Color32,
 }
 
 impl Default for HomeConfig {
     fn default() -> Self {
-        Self { font_size: 18. }
+        Self { 
+            font_size: 18.,
+            app_colour: egui::Color32::LIGHT_BLUE.linear_multiply(0.5) 
+        }
     }
 }
 
-#[derive(Serialize, Deserialize, Default)]
+#[derive(Serialize, Deserialize)]
 pub struct SpeedConfig {
     pub display: bool,
     pub units: SpeedUnits,
+    pub overlay_bgcolour: egui::Color32,
 }
 
-#[derive(Serialize, Deserialize, Default)]
+impl Default for SpeedConfig {
+    fn default() -> Self {
+        Self {
+            display: false,
+            units: SpeedUnits::default(),
+            overlay_bgcolour: egui::Color32::LIGHT_BLUE.linear_multiply(0.5),
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize)]
 pub struct LaspLapTimeConfig {
     pub display: bool,
+    pub overlay_bgcolour: egui::Color32,
+}
+
+impl Default for LaspLapTimeConfig {
+    fn default() -> Self {
+        Self {
+            display: false,
+            overlay_bgcolour: egui::Color32::LIGHT_BLUE.linear_multiply(0.5),
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Default)]
