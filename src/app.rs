@@ -78,18 +78,39 @@ impl MainApp {
     fn render_home_options(&mut self, ui: &mut egui::Ui) {
         ui.label("Home");
 
-        ui.label(format!("Font size: {}", self.config.home_config.font_size));
+        ui.horizontal(|ui| {
+            ui.label("Font size");
+            ui.add(egui::DragValue::new(&mut self.config.home_config.font_size).range(6.0..=40.0).speed(0.5));
+        });
 
         ui.horizontal(|ui| {
             ui.label("Pick background colour");
-            ui.color_edit_button_srgba(&mut self.config.home_config.app_colour);
+            ui.color_edit_button_srgba(&mut self.config.home_config.bg_colour);
+        });
+
+        ui.horizontal(|ui| {
+            ui.label("Pick font colour");
+            ui.color_edit_button_srgba(&mut self.config.home_config.font_colour);
         });
     }
 
     fn render_speed_options(&mut self, ui: &mut egui::Ui) {
         ui.label("Speed");
-        ui.label(format!("Show window: {}", self.config.speed_config.display));
-        let display_toggle = ui.add(toggle(&mut self.config.speed_config.display));
+
+        ui.horizontal(|ui| {
+            ui.label(format!("Show window: {}", self.config.speed_config.display));
+            let display_toggle = ui.add(toggle(&mut self.config.speed_config.display));
+            if display_toggle.clicked() {
+                self.save_config();
+                self.manage_speed_overlay();
+            }
+        });
+
+        ui.horizontal(|ui| {
+            ui.label("Font size");
+            ui.add(egui::DragValue::new(&mut self.config.speed_config.font_size).range(6.0..=40.0).speed(0.5));
+        });
+
         let mut units_enum = self.config.speed_config.units.clone();
         ui.horizontal(|ui| {
             ui.label("Units:");
@@ -121,10 +142,10 @@ impl MainApp {
             ui.color_edit_button_srgba(&mut self.config.speed_config.overlay_bgcolour);
         });
 
-        if display_toggle.clicked() {
-            self.save_config();
-            self.manage_speed_overlay();
-        }
+        ui.horizontal(|ui| {
+            ui.label("Pick font colour");
+            ui.color_edit_button_srgba(&mut self.config.speed_config.overlay_fontcolour);
+        });
     }
 
     fn manage_speed_overlay(&mut self) {
@@ -145,21 +166,34 @@ impl MainApp {
 
     fn render_lastlaptime_options(&mut self, ui: &mut egui::Ui) {
         ui.label("Last lap time");
-        ui.label(format!(
-            "Show window: {}",
-            self.config.lastlaptime_config.display
-        ));
-        let display_toggle = ui.add(toggle(&mut self.config.lastlaptime_config.display));
+
+        ui.horizontal(|ui| {
+          ui.label(format!(
+              "Show window: {}",
+              self.config.lastlaptime_config.display
+          ));
+          let display_toggle = ui.add(toggle(&mut self.config.lastlaptime_config.display));
+
+          if display_toggle.clicked() {
+              self.save_config();
+              self.manage_lastlaptime_overlay();
+          }
+        });
+
+        ui.horizontal(|ui| {
+            ui.label("Font size");
+            ui.add(egui::DragValue::new(&mut self.config.lastlaptime_config.font_size).range(6.0..=40.0).speed(0.5));
+        });
 
         ui.horizontal(|ui| {
             ui.label("Pick background colour");
             ui.color_edit_button_srgba(&mut self.config.lastlaptime_config.overlay_bgcolour);
         });
 
-        if display_toggle.clicked() {
-            self.save_config();
-            self.manage_lastlaptime_overlay();
-        }
+        ui.horizontal(|ui| {
+            ui.label("Pick font colour");
+            ui.color_edit_button_srgba(&mut self.config.lastlaptime_config.overlay_fontcolour);
+        });
     }
 
     fn manage_lastlaptime_overlay(&mut self) {
@@ -185,16 +219,21 @@ impl MainApp {
             WindowsConfig {
                 home_config: HomeConfig {
                     font_size: self.config.home_config.font_size,
-                    app_colour: self.config.home_config.app_colour,
+                    bg_colour: self.config.home_config.bg_colour,
+                    font_colour: self.config.home_config.font_colour,
                 },
                 speed_config: SpeedConfig {
                     display: self.config.speed_config.display,
+                    font_size: self.config.speed_config.font_size,
                     units: self.config.speed_config.units.clone(),
                     overlay_bgcolour: self.config.speed_config.overlay_bgcolour,
+                    overlay_fontcolour: self.config.speed_config.overlay_fontcolour,
                 },
                 lastlaptime_config: LaspLapTimeConfig {
                     display: self.config.lastlaptime_config.display,
+                    font_size: self.config.lastlaptime_config.font_size,
                     overlay_bgcolour: self.config.lastlaptime_config.overlay_bgcolour,
+                    overlay_fontcolour: self.config.lastlaptime_config.overlay_fontcolour,
                 },
             },
         );
@@ -222,7 +261,8 @@ impl eframe::App for MainApp {
         ctx.set_style(style);
 
         let mut visuals = egui::Visuals::default();
-        visuals.panel_fill = self.config.home_config.app_colour;
+        visuals.panel_fill = self.config.home_config.bg_colour;
+        visuals.override_text_color = Some(self.config.home_config.font_colour);
         ctx.set_visuals(visuals);
 
         ctx.request_repaint();

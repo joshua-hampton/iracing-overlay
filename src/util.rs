@@ -79,14 +79,16 @@ pub enum SpeedUnits {
 #[derive(Serialize, Deserialize)]
 pub struct HomeConfig {
     pub font_size: f32,
-    pub app_colour: egui::Color32,
+    pub bg_colour: egui::Color32,
+    pub font_colour: egui::Color32,
 }
 
 impl Default for HomeConfig {
     fn default() -> Self {
         Self { 
             font_size: 18.,
-            app_colour: egui::Color32::LIGHT_BLUE.linear_multiply(0.5) 
+            bg_colour: egui::Color32::WHITE.linear_multiply(0.5),
+            font_colour: egui::Color32::BLACK.linear_multiply(0.5),
         }
     }
 }
@@ -94,16 +96,20 @@ impl Default for HomeConfig {
 #[derive(Serialize, Deserialize)]
 pub struct SpeedConfig {
     pub display: bool,
+    pub font_size: f32,
     pub units: SpeedUnits,
     pub overlay_bgcolour: egui::Color32,
+    pub overlay_fontcolour: egui::Color32,
 }
 
 impl Default for SpeedConfig {
     fn default() -> Self {
         Self {
             display: false,
+            font_size: 18.,
             units: SpeedUnits::default(),
-            overlay_bgcolour: egui::Color32::LIGHT_BLUE.linear_multiply(0.5),
+            overlay_bgcolour: egui::Color32::WHITE.linear_multiply(0.5),
+            overlay_fontcolour: egui::Color32::BLACK.linear_multiply(0.5),
         }
     }
 }
@@ -111,14 +117,18 @@ impl Default for SpeedConfig {
 #[derive(Serialize, Deserialize)]
 pub struct LaspLapTimeConfig {
     pub display: bool,
+    pub font_size: f32,
     pub overlay_bgcolour: egui::Color32,
+    pub overlay_fontcolour: egui::Color32,
 }
 
 impl Default for LaspLapTimeConfig {
     fn default() -> Self {
         Self {
             display: false,
-            overlay_bgcolour: egui::Color32::LIGHT_BLUE.linear_multiply(0.5),
+            font_size: 18.,
+            overlay_bgcolour: egui::Color32::WHITE.linear_multiply(0.5),
+            overlay_fontcolour: egui::Color32::BLACK.linear_multiply(0.5),
         }
     }
 }
